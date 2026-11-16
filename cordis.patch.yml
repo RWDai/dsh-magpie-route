@@ -1,0 +1,25 @@
+# dsh-magpie-route 的 bundle 装配层。
+#
+# 只插一行：host 半（lib/index.js）挂只读端点，浏览器半（lib/client.js）挂输入框
+# 上方的 dock 条。两半是同一个 npm 包，`dsh.client` 声明让 DSH 自动装配浏览器半。
+#
+# 装法（官方 CLI 会把本包追加进 profile 的 dsh.profile.bundles）：
+#
+#   dsh plugin --profile web add <这个目录的路径>
+#
+# 装完重启 dsh web，刷新页面。
+- insert:
+    - id: magpie-route
+      name: dsh-magpie-route
+      config:
+        # magpie **web 控制台**的地址（不是网关的 3425）。
+        baseURL: http://127.0.0.1:3430
+        # 只向这个 gateway 的 inference 请求添加本 Agent 的显式会话标识。
+        gatewayURL: http://127.0.0.1:3425/v1
+        # web key 的取法：凭据 seam 里的引用名 → 同名环境变量。
+        # 也可以直接把 key 写在下面 webKey 里（不推荐：那是能改 magpie 的 key）。
+        webKeyEnv: MAGPIE_WEB_KEY
+        # 条内展开保留多少条。
+        limit: 12
+        # host 侧缓存，浏览器 2s 轮询不会每次都打 magpie。
+        cacheMs: 1000

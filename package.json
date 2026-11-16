@@ -1,0 +1,62 @@
+{
+  "name": "dsh-magpie-route",
+  "version": "0.3.0",
+  "description": "DSH plugin: a per-agent Magpie routing dock that shows the actual member and subgroup each main/subagent request served, using explicit session identity",
+  "type": "module",
+  "main": "lib/index.js",
+  "exports": {
+    ".": {
+      "default": "./lib/index.js"
+    },
+    "./client": {
+      "default": "./lib/client.js"
+    },
+    "./trace": {
+      "default": "./lib/trace.js"
+    },
+    "./package.json": "./package.json",
+    "./identity": {
+      "default": "./lib/identity.js"
+    }
+  },
+  "dsh": {
+    "client": {
+      "platform": "web",
+      "inject": [
+        "@deepseek-ai/dsh-client-runtime",
+        "@deepseek-ai/dsh-client-locale"
+      ]
+    },
+    "bundle": {
+      "patch": "./cordis.patch.yml"
+    }
+  },
+  "files": [
+    "lib",
+    "cordis.patch.yml",
+    "README.md",
+    "LICENSE"
+  ],
+  "scripts": {
+    "test": "node --test test/*.test.mjs && node test/client.smoke.mjs"
+  },
+  "keywords": [
+    "dsh",
+    "dsh-plugin",
+    "magpie",
+    "routing",
+    "trace"
+  ],
+  "engines": {
+    "node": ">=22"
+  },
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/RWDai/dsh-magpie-route.git"
+  },
+  "homepage": "https://github.com/RWDai/dsh-magpie-route#readme",
+  "bugs": {
+    "url": "https://github.com/RWDai/dsh-magpie-route/issues"
+  }
+}
