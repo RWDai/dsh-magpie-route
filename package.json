@@ -1,6 +1,6 @@
 {
   "name": "dsh-magpie-route",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "description": "DSH plugin: a per-agent Magpie routing dock that shows the actual member and subgroup each main/subagent request served, using explicit session identity",
   "type": "module",
   "main": "lib/index.js",

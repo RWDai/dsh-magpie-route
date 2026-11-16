@@ -148,6 +148,21 @@ test('child updates never replace the main summary, and expansion separates chil
   const expanded = text(client.RouteDock({ t, routeSessionId: 'main' }));
   assert.match(expanded, /子 Agent 1 · Audit/u);
   assert.match(expanded, /changed-child-model/u);
+  // The subagent block must open above the main history, not below it.
+  assert.ok(expanded.indexOf('子 Agent 1 · Audit') < expanded.indexOf('主 Agent 请求'), expanded);
+  assert.ok(expanded.includes('main-provider'), 'main history stays available below');
+});
+
+test('subagents without routes sort below those with one', async () => {
+  const bySession = { main: payload('main', { agents: [
+    { sessionId: 'blank', label: 'Blank', depth: 1, role: 'subagent', routes: [] },
+    { sessionId: 'live', label: 'Live', depth: 1, role: 'subagent', routes: [route('live')] },
+  ] }) };
+  const { client, t } = loadClient(fakeFetch([], bySession));
+  client.mountSession('main'); await tick();
+  client.getSessionStore('main').patch({ expanded: true });
+  const expanded = text(client.RouteDock({ t, routeSessionId: 'main' }));
+  assert.ok(expanded.indexOf('Live') < expanded.indexOf('Blank'), expanded);
 });
 
 test('current pending target is distinct from the last completed request', async () => {

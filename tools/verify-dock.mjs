@@ -34,8 +34,17 @@ try {
   if (process.env.VERIFY_WORKSPACE) {
     await page.getByText(process.env.VERIFY_WORKSPACE, { exact: true }).first().click();
   }
+  if (process.env.VERIFY_EXPAND_LIST) {
+    const more = page.getByText(/展开其余 \d+ 个会话|Show \d+ more/).first();
+    if (await more.count()) { await more.click(); await page.waitForTimeout(800); }
+  }
   if (process.env.VERIFY_TITLE) {
-    await page.getByText(process.env.VERIFY_TITLE, { exact: false }).first().click();
+    const row = page.getByText(process.env.VERIFY_TITLE, { exact: false }).first();
+    await row.waitFor({ timeout: 15000 });
+    await row.click();
+    if (process.env.VERIFY_DEBUG) {
+      console.log('after click:', JSON.stringify({ url: page.url(), dock: (await dock.innerText()).slice(0, 160) }));
+    }
   }
   if (process.env.VERIFY_SESSION) {
     await page.waitForFunction((id) => document.querySelector('div[data-magpie-route]')?.getAttribute('data-route-session') === id, process.env.VERIFY_SESSION, { timeout: 15000 });
