@@ -82,6 +82,11 @@ try {
       ours: pick(ours),
       todo: cardOf('任务'),
       goal: cardOf('进行中的目标'),
+      goalExact: (() => {
+        const el = [...document.querySelectorAll('div')].find((node) => (node.textContent ?? '').startsWith('进行中的目标')
+          && parseFloat(getComputedStyle(node).borderRadius) >= 8 && node.getBoundingClientRect().height >= 28);
+        return el ? pick(el) : null;
+      })(),
       dockAreaWidth: dockArea ? Math.round(dockArea.getBoundingClientRect().width) : null,
       cards: unique.slice(0, 12),
       inner: [...ours.querySelectorAll('*')].slice(0, 4).map(pick),
