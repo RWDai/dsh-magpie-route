@@ -17,7 +17,7 @@
   子 Agent 3 · Trace gateway session contracts  coding → gpt-astra → agentrouter/gpt-6-astra   已完成 · 200 · 26s
 ```
 
-- **展开即见子 Agent 模型**：有路由的子 Agent 排在最前，不用翻过主 Agent 的历史。
+- **展开即见子 Agent 模型**：有记录的子 Agent 直接列出（各自最近一次实际模型），没有记录的合并成一行提示，不占版面。
 - **主 agent 与每个 subagent 分开**：主行只取主 agent 自己的请求，子 agent 各自一行，不会把子 agent 的响应当成主 agent 的。
 - **没发过请求的会话就是空的**：不会因为别的会话/别的子 agent 在跑而变动。
 - **旧记录不猜归属**：没有带显式标识的历史请求显示「暂无可核验路由」，而不是按时间或内容推测。

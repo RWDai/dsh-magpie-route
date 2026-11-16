@@ -150,10 +150,11 @@ test('child updates never replace the main summary, and expansion separates chil
   assert.match(expanded, /changed-child-model/u);
   // The subagent block must open above the main history, not below it.
   assert.ok(expanded.indexOf('子 Agent 1 · Audit') < expanded.indexOf('主 Agent 请求'), expanded);
+  assert.doesNotMatch(expanded, /暂无记录/, 'a routed child leaves no silent hint');
   assert.ok(expanded.includes('main-provider'), 'main history stays available below');
 });
 
-test('subagents without routes sort below those with one', async () => {
+test('subagents without a route collapse into one hint instead of empty rows', async () => {
   const bySession = { main: payload('main', { agents: [
     { sessionId: 'blank', label: 'Blank', depth: 1, role: 'subagent', routes: [] },
     { sessionId: 'live', label: 'Live', depth: 1, role: 'subagent', routes: [route('live')] },
@@ -162,7 +163,10 @@ test('subagents without routes sort below those with one', async () => {
   client.mountSession('main'); await tick();
   client.getSessionStore('main').patch({ expanded: true });
   const expanded = text(client.RouteDock({ t, routeSessionId: 'main' }));
-  assert.ok(expanded.indexOf('Live') < expanded.indexOf('Blank'), expanded);
+  assert.match(expanded, /Live/u);
+  assert.doesNotMatch(expanded, /Blank/u, 'unrouted child is not a row');
+  assert.match(expanded, /1 个子 Agent 暂无记录/u);
+  assert.match(expanded, /子 Agent \(2\)/u, 'the total still counts every child');
 });
 
 test('current pending target is distinct from the last completed request', async () => {
